@@ -3,30 +3,25 @@ import reactLogo from './assets/react.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [originalUrl, setOriginalUrl ] = useState('')
+
+  const deleteHttp = (e) => {
+    const result = e.target.value.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "")
+    setOriginalUrl(result)
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+      <h1 className='title'>Meow<span className='dottitle'>.</span>Short</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <div className='inputContainer'>
+          <span className='http'><p>http::/</p></span>
+          <input type="url" className='original' placeholder='Put Your Url Here' onChange={deleteHttp} value={originalUrl}/>
+        </div>
+        {/* <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+        </button> */}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </div>
   )
 }
