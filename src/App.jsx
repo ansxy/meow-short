@@ -1,32 +1,44 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import axios from 'axios'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [originalUrl, setOriginalUrl ] = useState('')
+  const [displayUrl ,setDisplayUrl] = useState('')
+  const [veryOriginalUrl,setVeryOriginalUrl] = useState('')
+
+  useEffect(() => {
+    const timeOutId =setTimeout(() => setDisplayUrl(originalUrl), 500)
+    return () => clearTimeout(timeOutId)
+  },[originalUrl])
+  
+
+  const deleteHttp = (e) => {
+    setVeryOriginalUrl(e.target.value)
+    const result = e.target.value.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "")
+    setOriginalUrl(result)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    axios.post('http://103.187.146.72:3001/meow/short',{origUrl : veryOriginalUrl}).then(res => {
+      console.log(res.data)
+    }).catch(err => {
+      console.log(err.message)
+    })
+  }
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1 className='title'>Meow<span className='dottitle'>.</span>Short</h1>
+      <form className="card" onSubmit={handleSubmit}>
+        <div className='inputContainer'>
+          <span className='http'><p>https::/</p></span>
+            <input type="text" className='original' placeholder='Put Your Url Here' onChange={deleteHttp} value={originalUrl}/>
+        </div>
+        <button className='submitbtn'>Meow</button>
+      </form>
     </div>
   )
 }
